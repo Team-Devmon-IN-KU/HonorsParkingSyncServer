@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExternalDBService {
-  ㅅㄷㄴㅅ
+
   @Value("${spring.datasource.url}")
   private String DB_URL = "jdbc:sqlserver://1.237.1.129:50081;database=PARKINGK";
   @Value("${spring.datasource.username}")
