@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MongoLogTableRepository extends MongoRepository<MongoLogTableEntity, String> {
 
-  Optional<MongoLogTableEntity> findTopByOOrderByIdDesc();
+  Optional<MongoLogTableEntity> findTopByOrderByIdDesc();
 }
