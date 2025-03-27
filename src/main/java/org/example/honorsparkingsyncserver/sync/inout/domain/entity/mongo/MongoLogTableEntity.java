@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Setter
@@ -13,8 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MongoLogTableEntity {
 
   @Id
-  private Long id;
+  @Field("_id")
+  private Long entryId;
   private String lastHash;
-  private Boolean isUpdatable;
 
 }

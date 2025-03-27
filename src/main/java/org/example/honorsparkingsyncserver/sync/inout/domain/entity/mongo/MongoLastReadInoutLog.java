@@ -14,6 +14,5 @@ public class MongoLastReadInoutLog {
 
   @Id
   private Long id;  // MongoDB에서 자동 생성되는 _id가 있지만, 만약 별도의 필드로 관리하고 싶으면 사용
-
-  private Long lastReadEntryId;  // 마지막으로 읽은 entryId
+  private Long lastReadEntityId;  // 마지막으로 읽은 entryId
 }
