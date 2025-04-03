@@ -3,8 +3,6 @@ package org.example.honorsparkingsyncserver.sync.inout.domain.entity;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -23,7 +21,7 @@ import lombok.Setter;
 public class EntryMainRecordsEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
+//  @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
   @Column(name = "entry_id")
   private Long entryId;
 

@@ -2,13 +2,14 @@ package org.example.honorsparkingsyncserver.sync.inout.repository;
 
 import java.util.List;
 import org.example.honorsparkingsyncserver.sync.inout.domain.entity.EntryMainRecordsEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ParkingInoutRepository extends JpaRepository<EntryMainRecordsEntity, Long> {
+public interface EntryRepository extends JpaRepository<EntryMainRecordsEntity, Long> {
 
   @Query(value = "SELECT * FROM Entry_main_records " +
       "WHERE entry_id > :entry_id " +
@@ -20,6 +21,7 @@ public interface ParkingInoutRepository extends JpaRepository<EntryMainRecordsEn
       @Param("limit") int limit,
       @Param("offset") int offset);
 
+  @EntityGraph
   List<EntryMainRecordsEntity> findAllByEntryIdIn(List<Long> entryIds);
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.example.honorsparkingsyncserver.sync.inout.domain.entity.mongo.MongoLogTableEntity;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,6 @@ public interface MongoLogTableRepository extends MongoRepository<MongoLogTableEn
   // ✅ 가장 큰 entryId 조회
   Optional<MongoLogTableEntity> findTopByOrderByEntryIdDesc();
 
+  @Modifying
+  void deleteByEntryIdIn(List<Long> entryIds);
 }
