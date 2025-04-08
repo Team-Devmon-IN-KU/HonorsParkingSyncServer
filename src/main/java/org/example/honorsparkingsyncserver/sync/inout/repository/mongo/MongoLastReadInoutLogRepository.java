@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface MongoLastReadInoutLogRepository extends
     MongoRepository<MongoLastReadInoutLog, Long> {
 
-//  Optional<MongoLastReadInoutLog> findByInoutId(Long inoutId);
 }
