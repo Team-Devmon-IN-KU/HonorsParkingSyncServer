@@ -153,7 +153,7 @@ public class SyncUpdateService {
                 .exitTime(exitRecord.getExitTime())
                 .fee(paymentRecord != null ? paymentRecord.getPaymentFee() : null)
                 .paidAt(paymentRecord != null ? paymentRecord.getPaymentTime() : null)
-                .parkinglotId(exitRecord.getExitLotId())
+                .parkinglotId(Long.parseLong(exitRecord.getExitLotId())) // 숫자 변환 실패가능성 있음!!
                 .build();
           })
           .collect(Collectors.toList());

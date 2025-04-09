@@ -1,15 +1,8 @@
 package org.example.honorsparkingsyncserver.sync.inout.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.honorsparkingsyncserver.sync.inout.domain.entity.mongo.MongoLogTableEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.BulkOperations;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,25 +13,8 @@ public class SyncService {
 
   private static final Logger logger = LoggerFactory.getLogger(SyncService.class);
 
-  private final MongoOperations mongoOperations;
   private final SyncUpdateService syncHelperService;
   private final SyncNewService syncNewService;
-
-  // id중복 저장 시도 시에 update쿼리 보내는 bulk 연산
-  public void saveAllBulkOps(List<MongoLogTableEntity> entities) {
-    BulkOperations bulkOps = mongoOperations.bulkOps(BulkOperations.BulkMode.UNORDERED,
-        MongoLogTableEntity.class);
-
-    for (MongoLogTableEntity entity : entities) {
-      Query query = new Query(Criteria.where("_id").is(entity.getEntryId())); // ID 기준으로 찾음
-      Update update = new Update()
-          .set("lastHash", entity.getLastHash()); // 업데이트할 필드들 설정
-
-      bulkOps.upsert(query, update);
-    }
-
-    bulkOps.execute();
-  }
 
   // 매일 1분마다 실행 (스케줄러로 주기적인 동기화)
   @Scheduled(fixedDelay = 10000) // 6초마다 실행

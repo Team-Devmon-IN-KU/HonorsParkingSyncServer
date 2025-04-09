@@ -17,7 +17,6 @@ import org.example.honorsparkingsyncserver.sync.inout.repository.PayemntReposito
 import org.example.honorsparkingsyncserver.sync.inout.repository.mongo.MongoLastReadInoutLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,14 +43,6 @@ public class SyncNewService {
   private static final int BATCH_SIZE = 1000;
   private static final Logger logger = LoggerFactory.getLogger(SyncService.class);
 
-  @Value("${sync.url}")
-  private String SYNC_URL;
-  @Value("${sync.api-key}")
-  private String API_KEY;
-  @Value("${sync.header-name}")
-  private String HEADER_NAME;
-
-
   @Transactional(propagation = Propagation.REQUIRED)
   public void syncNewData() {
     logger.info("New data Sync process started");
@@ -76,15 +67,9 @@ public class SyncNewService {
       logger.info("Inserted new ID logs into MongoDB", maxEntryId);
 
       // 5. 앱 서버로 동기화 요청
-      try {
-        syncFetchService.sendBatchToServer(logsToUpdate);
-        logger.info("Inserted {} new logs into App server", logsToUpdate.size());
-      } catch (Exception e) {
-        logger.error("🚨 새로운 데이터 동기화 중 오류 발생 {} ", e.getMessage());
-      }
+      syncFetchService.sendBatchToServer(logsToUpdate);
+      logger.info("Inserted {} new logs into App server", logsToUpdate.size());
     }
-
-
   }
 
   /**
