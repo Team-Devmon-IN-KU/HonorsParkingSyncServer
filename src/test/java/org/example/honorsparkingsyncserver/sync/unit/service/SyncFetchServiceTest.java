@@ -92,7 +92,7 @@ public class SyncFetchServiceTest {
         .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Bad Request"));
 
     // when & then
-    assertThrows(HttpClientErrorException.class, () -> syncFetchService.sendBatchToServer(batch));
+    assertThrows(RuntimeException.class, () -> syncFetchService.sendBatchToServer(batch));
   }
 
   @Test

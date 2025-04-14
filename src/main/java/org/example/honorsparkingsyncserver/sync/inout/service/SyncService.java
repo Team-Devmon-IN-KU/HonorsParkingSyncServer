@@ -17,7 +17,7 @@ public class SyncService {
   private final SyncNewService syncNewService;
 
   // 매일 1분마다 실행 (스케줄러로 주기적인 동기화)
-  @Scheduled(fixedDelay = 10000) // 6초마다 실행
+  @Scheduled(fixedDelayString = "${scheduler.fixed-delay}")
   @Transactional
   public void syncData() {
     try {
