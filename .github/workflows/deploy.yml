@@ -73,5 +73,5 @@ jobs:
           script: |
             docker stop honorsparking-sync-server || true
             docker rm honorsparking-sync-server || true
-            docker pull gyural/honorsparking-server:latest
+            docker pull gyural/honorsparkingsyncserver-backend
             docker run -d --name honorsparking-sync-server -p 8080:8080 gyural/honorsparkingsyncserver-backend:latest
