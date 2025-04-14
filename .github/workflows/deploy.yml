@@ -36,7 +36,7 @@ jobs:
           echo "${{ secrets.APPLICATION_PROD_YML }}" > ./src/main/resources/config/application-prod.yml
 
       - name: 테스트 및 빌드하기
-        run: ./gradlew clean build
+        run: ./gradlew clean build -Dspring.profiles.active=prod
 
       # ECR에 접근할 수 있는 권한을 허용받기 위해
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
