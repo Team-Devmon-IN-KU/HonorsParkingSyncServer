@@ -16,13 +16,15 @@ public class SyncNonMemberServiceImpl implements SyncNonMemberService {
 
     @Override
     public SyncNonMemberResponse getParkingInfo(SyncNonMemberRequest request) {
+
+        // 더미데이터
         return SyncNonMemberResponse.builder()
                 .vehicleNumber(request.getVehicleNumber())
                 .parkingLotLocation("세종시 조치원읍")
                 .entryTime(LocalDateTime.now().minusMinutes(60))
                 .totalParkingMinutes(60)
                 .currentFee(3000)
-                .entryPhotoUrl("https://example.com/images/test.jpg")
+                .entryPhotoUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/2023_Hyundai_Avante_N_1.jpg/330px-2023_Hyundai_Avante_N_1.jpg")
                 .build();
     }
 
