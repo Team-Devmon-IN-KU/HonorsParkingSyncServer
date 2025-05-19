@@ -12,13 +12,13 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-@Entity
-@Table(name = "parking_lots")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "parking_lots")
 public class ParkingLotEntity implements Serializable {
 
     @Id

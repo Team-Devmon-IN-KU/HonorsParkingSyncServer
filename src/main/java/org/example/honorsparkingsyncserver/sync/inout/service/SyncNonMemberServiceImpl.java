@@ -6,7 +6,9 @@ import org.example.honorsparkingsyncserver.sync.inout.domain.dto.SyncNonMemberRe
 import org.example.honorsparkingsyncserver.sync.inout.domain.dto.SyncNonMemberResponse;
 import org.example.honorsparkingsyncserver.sync.inout.domain.entity.EntryMainRecordsWithLotEntity;
 
+import org.example.honorsparkingsyncserver.sync.inout.domain.entity.FeeStructureCoreEntity;
 import org.example.honorsparkingsyncserver.sync.inout.repository.EntryWithLotRepository;
+import org.example.honorsparkingsyncserver.sync.inout.repository.FeeStructureCoreRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class SyncNonMemberServiceImpl implements SyncNonMemberService {
 
     private final EntryWithLotRepository entryWithLotRepository;
+    private final FeeStructureCoreRepository feeRepository;
 
     @Override
     public SyncNonMemberListResponse getParkingInfo(SyncNonMemberRequest request) {
@@ -27,12 +30,32 @@ public class SyncNonMemberServiceImpl implements SyncNonMemberService {
         List<EntryMainRecordsWithLotEntity> entryEntities =
                 entryWithLotRepository.findActiveWithJoin(request.getVehicleNumber());
 
+        FeeStructureCoreEntity feePolicy = feeRepository.findByFeeCode("001");
+
+        int baseTime = (feePolicy != null && feePolicy.getBaseTime() != null) ? feePolicy.getBaseTime() : 60;
+        int baseFee = (feePolicy != null && feePolicy.getBaseFee() != null) ? feePolicy.getBaseFee() : 0;
+        int unitTime = (feePolicy != null && feePolicy.getUnitTime() != null) ? feePolicy.getUnitTime() : 30;
+        int unitFee = (feePolicy != null && feePolicy.getUnitFee() != null) ? feePolicy.getUnitFee() : 1000;
+        int dailyMax = (feePolicy != null && feePolicy.getDailyMaxFee() != null) ? feePolicy.getDailyMaxFee() : 50000;
+
         List<SyncNonMemberResponse> entries = entryEntities.stream()
+
                 .map(entry -> {
                     LocalDateTime entryTime = entry.getEntryTime();
-                    long minutes = (entryTime != null)
-                            ? Duration.between(entryTime, LocalDateTime.now()).toMinutes()
+                    int totalMinutes = (entryTime != null)
+                            ? (int) Duration.between(entryTime, LocalDateTime.now()).toMinutes()
                             : 0;
+
+                    // 주차 요금 계산 로직
+                    int currentFee;
+                    if (totalMinutes <= baseTime) {
+                        currentFee = baseFee;
+                    } else {
+                        int additionalMinutes = totalMinutes - baseTime;
+                        int units = (int) Math.ceil(additionalMinutes / (double) unitTime);
+                        currentFee = baseFee + units * unitFee;
+                        if (currentFee > dailyMax) currentFee = dailyMax;
+                    }
 
                     String photo = entry.getEntryPhoto();
                     String photoUrl = (photo != null && !photo.trim().isEmpty())
@@ -47,8 +70,8 @@ public class SyncNonMemberServiceImpl implements SyncNonMemberService {
                             .vehicleNumber(entry.getVehicleNumber())
                             .parkingLotLocation(location)
                             .entryTime(entry.getEntryTime())
-                            .totalParkingMinutes((int) minutes)
-                            .currentFee(0)
+                            .totalParkingMinutes(totalMinutes)
+                            .currentFee(currentFee)
                             .entryPhotoUrl(photoUrl)
                             .build();
                 })
