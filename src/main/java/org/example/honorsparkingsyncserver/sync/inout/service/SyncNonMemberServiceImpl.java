@@ -41,10 +41,21 @@ public class SyncNonMemberServiceImpl implements SyncNonMemberService {
         List<SyncNonMemberResponse> entries = entryEntities.stream()
 
                 .map(entry -> {
+
+                    // ec2 서버하고 실제 시각하고 9시간 차이
+                    // ec2가 시스템 시간을 utc로 사용하는것으로 예상
+
+                    // 시간 계산 로직 - 배포 시 (9시간 추가)
                     LocalDateTime entryTime = entry.getEntryTime();
                     int totalMinutes = (entryTime != null)
-                            ? (int) Duration.between(entryTime, LocalDateTime.now()).toMinutes()
+                            ? (int) Duration.between(entryTime, LocalDateTime.now().plusHours(9)).toMinutes()
                             : 0;
+
+                    // 시간 계산 로직 - 로컬 서버 테스트 시
+//                    LocalDateTime entryTime = entry.getEntryTime();
+//                    int totalMinutes = (entryTime != null)
+//                            ? (int) Duration.between(entryTime, LocalDateTime.now()).toMinutes()
+//                            : 0;
 
                     // 주차 요금 계산 로직
                     int currentFee;
@@ -57,10 +68,11 @@ public class SyncNonMemberServiceImpl implements SyncNonMemberService {
                         if (currentFee > dailyMax) currentFee = dailyMax;
                     }
 
-                    String photo = entry.getEntryPhoto();
-                    String photoUrl = (photo != null && !photo.trim().isEmpty())
-                            ? "https://ftp-server.com/photos/" + photo
-                            : null;
+                    String photoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/2023_Hyundai_Avante_N_1.jpg/330px-2023_Hyundai_Avante_N_1.jpg";
+//                    String photo = entry.getEntryPhoto();
+//                    String photoUrl = (photo != null && !photo.trim().isEmpty())
+//                            ? "https://ftp-server.com/photos/" + photo
+//                            : null;
 
                     String location = (entry.getParkingLot() != null)
                             ? entry.getParkingLot().getLocation()
