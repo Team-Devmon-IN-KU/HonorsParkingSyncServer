@@ -46,16 +46,16 @@ public class SyncNonMemberServiceImpl implements SyncNonMemberService {
                     // ec2가 시스템 시간을 utc로 사용하는것으로 예상
 
                     // 시간 계산 로직 - 배포 시 (9시간 추가)
-                    LocalDateTime entryTime = entry.getEntryTime();
-                    int totalMinutes = (entryTime != null)
-                            ? (int) Duration.between(entryTime, LocalDateTime.now().plusHours(9)).toMinutes()
-                            : 0;
-
-                    // 시간 계산 로직 - 로컬 서버 테스트 시
 //                    LocalDateTime entryTime = entry.getEntryTime();
 //                    int totalMinutes = (entryTime != null)
-//                            ? (int) Duration.between(entryTime, LocalDateTime.now()).toMinutes()
+//                            ? (int) Duration.between(entryTime, LocalDateTime.now().plusHours(9)).toMinutes()
 //                            : 0;
+
+                    // 시간 계산 로직 - 로컬 서버 테스트 시
+                    LocalDateTime entryTime = entry.getEntryTime();
+                    int totalMinutes = (entryTime != null)
+                            ? (int) Duration.between(entryTime, LocalDateTime.now()).toMinutes()
+                            : 0;
 
                     // 주차 요금 계산 로직
                     int currentFee;
